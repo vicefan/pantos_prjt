@@ -4,8 +4,9 @@ import json
 def load_graph():
     """JSON 파일에서 그래프 데이터 로드"""
     with open('graph.json', 'r', encoding='utf-8') as f:
-        print(dict(json.load(f)))
-        return dict(json.load(f))
+        data = json.load(f)
+        print(data)
+        return data
 
 
 def dijkstra(graph, start_node, end_node, priority_key):
