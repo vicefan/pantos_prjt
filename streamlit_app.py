@@ -27,7 +27,8 @@ def search_routes(graph, start, end, selected_priority):
         if all_paths == "no_path":
             return "no_path"
         key = priorities[selected_priority]
-        sorted_paths = sorted(all_paths, key=lambda x: x[key])
+        # 모든 기준에 대해 2차 정렬로 carbon 추가
+        sorted_paths = sorted(all_paths, key=lambda x: (x[key], x['carbon']))
         return {selected_priority: sorted_paths}
 
 # Streamlit 앱 메인 함수 부분 수정
