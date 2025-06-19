@@ -1,5 +1,6 @@
 import networkx as nx
 import json
+import itertools
 
 def dijkstra(graph, start_node, end_node, priority_key):
     """
@@ -149,61 +150,57 @@ def find_all_paths(graph, start, end, max_paths=10):
             
         # 각 경로에 대해 모든 가능한 엣지 조합을 고려하여 경로 상세 정보 생성
         path_details = []
-        
-        # 각 노드 경로에 대해
-        for path_nodes in all_paths[:max_paths]:  # 너무 많은 경로는 제한
-            # 각 인접 노드 쌍에 대해 가능한 엣지 조합 계산
+        seen = set()
+        for node_path in all_paths:
+            # 각 구간별 운송 옵션 리스트
             edge_options = []
-            
-            for i in range(len(path_nodes) - 1):
-                from_node = path_nodes[i]
-                to_node = path_nodes[i+1]
-                
-                # 두 노드 간의 모든 가능한 엣지
-                edges = []
-                for edge_id, edge_data in G[from_node][to_node].items():
-                    edges.append(edge_data)
-                
-                edge_options.append(edges)
-            
-            # 각 경로의 첫 번째 엣지 옵션만 사용 (간략화)
-            path_detail = {
-                'nodes': path_nodes,
-                'path_details': [],
-                'time': 0,
-                'cost': 0,
-                'distance': 0,
-                'carbon': 0,
-                'transfers': len(path_nodes) - 2
-            }
-            
-            # 경로 상세 정보 및 총 비용 계산
-            for i in range(len(path_nodes) - 1):
-                from_node = path_nodes[i]
-                to_node = path_nodes[i+1]
-                edge = edge_options[i][0]  # 첫 번째 엣지 옵션 사용
-                
-                path_detail['path_details'].append({
-                    'from': from_node,
-                    'to': to_node,
-                    'mode': edge['mode'],
-                    'time': edge['time'],
-                    'cost': edge['cost'],
-                    'carbon': edge['carbon']
+            for i in range(len(node_path) - 1):
+                from_node = node_path[i]
+                to_node = node_path[i+1]
+                options = []
+                for key, edge in G[from_node][to_node].items():
+                    options.append(edge)
+                edge_options.append(options)
+            # 모든 운송 옵션 조합 생성
+            for combo in itertools.product(*edge_options):
+                # 중복 제거: (노드 경로, 운송수단 조합) 기준
+                combo_key = (
+                    tuple(node_path),
+                    tuple(edge['mode'] for edge in combo)
+                )
+                if combo_key in seen:
+                    continue
+                seen.add(combo_key)
+                # 경로 정보 누적
+                total_time = sum(edge['time'] for edge in combo)
+                total_cost = sum(edge['cost'] for edge in combo)
+                total_distance = sum(edge['distance'] for edge in combo)
+                total_carbon = sum(edge['carbon'] for edge in combo)
+                transfers = len(node_path) - 2
+                path_details.append({
+                    'nodes': node_path,
+                    'time': total_time,
+                    'cost': total_cost,
+                    'distance': total_distance,
+                    'carbon': total_carbon,
+                    'transfers': transfers,
+                    'path_details': [
+                        {
+                            'from': node_path[i],
+                            'to': node_path[i+1],
+                            'mode': combo[i]['mode'],
+                            'time': combo[i]['time'],
+                            'cost': combo[i]['cost'],
+                            'distance': combo[i]['distance'],
+                            'carbon': combo[i]['carbon'],
+                        }
+                        for i in range(len(combo))
+                    ]
                 })
-                
-                path_detail['time'] += edge['time']
-                path_detail['cost'] += edge['cost']
-                path_detail['distance'] += edge['distance']
-                path_detail['carbon'] += edge['carbon']
-            
-            path_details.append(path_detail)
-        
-        # 경로를 소요 시간 기준으로 정렬
+        # 시간 기준 정렬 및 최대 경로 제한
         path_details.sort(key=lambda x: x['time'])
-        
-        return path_details
-    
+        return path_details[:max_paths] if max_paths else path_details
+
     except Exception as e:
         print(f"경로 탐색 중 오류 발생: {str(e)}")
         return None
