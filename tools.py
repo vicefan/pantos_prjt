@@ -84,10 +84,11 @@ def dijkstra(graph, start_node, end_node, priority_key):
         return result
     
     except nx.NetworkXNoPath:
-        return "No path found"
+        print(f"경로 없음: {start_node} -> {end_node}")
+        return "no_path"  # 대소문자 일관성 유지
     except Exception as e:
         print(f"오류 발생: {e}")
-        return None
+        return None  # None으로 통일
 
 def load_graph():
     """JSON 파일에서 그래프 데이터 로드"""
@@ -224,18 +225,33 @@ def search_routes(graph, start, end, selected_priority):
     # 모든 경로 찾기 옵션
     if selected_priority == '모든 경로':
         all_paths = find_all_paths(graph, start, end)
-        if isinstance(all_paths, str) and all_paths == "no_path":
+        if all_paths == "no_path" or not all_paths:
             return "no_path"
         return {"모든 가능한 경로": all_paths}
     else:
-        # 선택된 우선순위에 대해서만 최적 경로 계산
-        key = priorities[selected_priority]
-        result = dijkstra(graph, start, end, key)
-        
-        if result == "No path found":
-            return "no_path"
-        elif result == "Same node":
-            return "same_node"
-        
-        # 단일 경로 결과를 리스트로 감싸서 반환
-        return {selected_priority: [result]}
+        try:
+            # 디버그 로그 (실제 배포 시 제거)
+            print(f"우선순위: {selected_priority}, 키: {priorities.get(selected_priority)}")
+            
+            # 선택된 우선순위에 대해서만 최적 경로 계산
+            key = priorities[selected_priority]
+            result = dijkstra(graph, start, end, key)
+            
+            # 디버그 로그 (실제 배포 시 제거)
+            print(f"다익스트라 결과: {type(result)}, 값: {result}")
+            
+            # 경로가 없는 경우 처리
+            if result == "No path found" or result == "no_path":
+                return "no_path"
+            elif result == "Same node" or result == "same_node":
+                return "same_node"
+            elif result is None:
+                return "no_path"
+                
+            # 결과가 있는 경우 - 리스트 형태로 반환
+            return {selected_priority: [result]}
+            
+        except Exception as e:
+            # 예외 처리 (디버그용)
+            print(f"오류 발생: {str(e)}")
+            return f"error: {str(e)}"
