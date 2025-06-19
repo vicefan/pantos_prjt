@@ -155,7 +155,7 @@ def find_all_paths(graph, start, end, max_paths=10):
             for combo in itertools.product(*edge_options):
                 combo_key = (
                     tuple(node_path),
-                    tuple(edge['mode'] for edge in combo)
+                    tuple((edge['mode'], edge['time'], edge['cost']) for edge in combo)
                 )
                 if combo_key in seen:
                     continue
