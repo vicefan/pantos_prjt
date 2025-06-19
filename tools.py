@@ -207,3 +207,35 @@ def find_all_paths(graph, start, end, max_paths=10):
     except Exception as e:
         print(f"경로 탐색 중 오류 발생: {str(e)}")
         return None
+
+def search_routes(graph, start, end, selected_priority):
+    """경로 검색 로직"""
+    # 우선순위 정의
+    priorities = {
+        '최소 시간순': 'time',
+        '최소 비용순': 'cost',
+        '최소 환적순': 'transfers'
+    }
+    
+    # 시작 노드와 종료 노드가 같은 경우
+    if start == end:
+        return "same_node"
+    
+    # 모든 경로 찾기 옵션
+    if selected_priority == '모든 경로':
+        all_paths = find_all_paths(graph, start, end)
+        if isinstance(all_paths, str) and all_paths == "no_path":
+            return "no_path"
+        return {"모든 가능한 경로": all_paths}
+    else:
+        # 선택된 우선순위에 대해서만 최적 경로 계산
+        key = priorities[selected_priority]
+        result = dijkstra(graph, start, end, key)
+        
+        if result == "No path found":
+            return "no_path"
+        elif result == "Same node":
+            return "same_node"
+        
+        # 단일 경로 결과를 리스트로 감싸서 반환
+        return {selected_priority: [result]}

@@ -103,11 +103,14 @@ def main():
         # 경로 검색 실행
         results = search_routes(graph, start, end, selected_priority)
         
-        # 결과 처리
-        if results == "no_path":
-            st.error(f"💔 {start}에서 {end}까지 경로를 찾을 수 없습니다.")
-        elif results == "same_node":
-            st.warning("⚠️ 출발지와 도착지가 동일합니다.")
+        # 결과 처리 부분 수정
+        if isinstance(results, str):  # 문자열인 경우 별도 처리
+            if results == "no_path":
+                st.error(f"💔 {start}에서 {end}까지 경로를 찾을 수 없습니다.")
+            elif results == "same_node":
+                st.warning("⚠️ 출발지와 도착지가 동일합니다.")
+            else:
+                st.error(f"오류 발생: {results}")
         else:
             # 결과 표시 영역
             st.header(f"🚢 {start} → {end} 경로 검색 결과")
