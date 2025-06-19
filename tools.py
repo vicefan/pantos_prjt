@@ -1,13 +1,5 @@
-import networkx as nx 
+import networkx as nx
 import json
-
-def load_graph():
-    """JSON 파일에서 그래프 데이터 로드"""
-    with open('graph.json', 'r', encoding='utf-8') as f:
-        data = json.load(f)
-        print(data)
-        return data
-
 
 def dijkstra(graph, start_node, end_node, priority_key):
     """
@@ -19,27 +11,22 @@ def dijkstra(graph, start_node, end_node, priority_key):
     
     G = nx.MultiDiGraph()
     
-    # 노드 및 엣지 추가 - 가중치 튜플로 설정 (주 우선순위, 탄소 배출량)
+    # 노드 및 엣지 추가 - 가중치에 탄소 배출량을 2차 기준으로 포함
     for from_node, destinations in graph.items():
         for to_node, edges in destinations.items():
             for edge in edges:
-                # 우선순위 키에 따른 가중치 설정
-                if priority_key == 'transfers':
-                    main_weight = 1  # 환적 횟수는 간선당 1로 고정
-                else:
-                    main_weight = edge[priority_key]
-                    
-                # 동일 우선순위일 때 탄소 배출량으로 두 번째 기준 설정
-                carbon_weight = edge['carbon']
+                # 우선순위에 따른 가중치 설정
+                primary_weight = 1 if priority_key == 'transfers' else edge[priority_key]
                 
                 # 간선 추가 (모든 정보 저장)
                 G.add_edge(from_node, to_node, 
-                          weight=main_weight,  # 주 가중치
-                          carbon=carbon_weight,  # 부 가중치 (동점 처리용)
+                          weight=primary_weight,
+                          carbon_weight=edge['carbon'],
                           mode=edge['mode'],
                           time=edge['time'],
                           cost=edge['cost'],
-                          distance=edge['distance'])
+                          distance=edge['distance'],
+                          carbon=edge['carbon'])
     
     try:
         # 다익스트라 알고리즘으로 최단 경로 찾기
@@ -65,14 +52,17 @@ def dijkstra(graph, start_node, end_node, priority_key):
             best_edge = None
             
             for edge_id, edge_data in G[from_node][to_node].items():
-                # 주 우선순위가 더 낮은 간선 선택
-                if edge_data['weight'] < min_weight:
-                    min_weight = edge_data['weight']
-                    min_carbon = edge_data['carbon']
+                current_weight = edge_data['weight']
+                carbon_weight = edge_data['carbon_weight']
+                
+                # 더 작은 가중치를 가진 간선 선택
+                if current_weight < min_weight:
+                    min_weight = current_weight
+                    min_carbon = carbon_weight
                     best_edge = edge_data
-                # 주 우선순위가 같다면 탄소 배출량이 더 낮은 간선 선택
-                elif edge_data['weight'] == min_weight and edge_data['carbon'] < min_carbon:
-                    min_carbon = edge_data['carbon']
+                # 가중치가 같으면 탄소 배출량이 더 적은 간선 선택
+                elif current_weight == min_weight and carbon_weight < min_carbon:
+                    min_carbon = carbon_weight
                     best_edge = edge_data
             
             # 최적 간선 정보 누적
@@ -98,7 +88,42 @@ def dijkstra(graph, start_node, end_node, priority_key):
     except Exception as e:
         print(f"오류 발생: {e}")
         return None
-    
+
+def load_graph():
+    """JSON 파일에서 그래프 데이터 로드"""
+    try:
+        with open('graph.json', 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        # 샘플 그래프 제공
+        return {
+            "Incheon": {
+                "Shanghai": [
+                    {"mode": "Sea", "time": 48, "cost": 300, "distance": 850, "carbon": 500},
+                    {"mode": "Air", "time": 2, "cost": 1500, "distance": 850, "carbon": 4000}
+                ],
+                "Vladivostok": [
+                    {"mode": "Sea", "time": 72, "cost": 400, "distance": 1000, "carbon": 600}
+                ]
+            },
+            "Shanghai": {
+                "Duisburg": [
+                    {"mode": "Rail", "time": 360, "cost": 2000, "distance": 9000, "carbon": 3000}
+                ]
+            },
+            "Vladivostok": {
+                "Duisburg": [
+                    {"mode": "Rail", "time": 240, "cost": 1800, "distance": 10000, "carbon": 2500}
+                ]
+            },
+            "Duisburg": {
+                "Warsaw": [
+                    {"mode": "Rail", "time": 24, "cost": 200, "distance": 1000, "carbon": 150},
+                    {"mode": "Truck", "time": 18, "cost": 300, "distance": 1000, "carbon": 250}
+                ]
+            },
+            "Warsaw": {}
+        }
 
 def find_all_paths(graph, start, end, max_paths=10):
     """
@@ -180,4 +205,5 @@ def find_all_paths(graph, start, end, max_paths=10):
         return path_details
     
     except Exception as e:
+        print(f"경로 탐색 중 오류 발생: {str(e)}")
         return None
