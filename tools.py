@@ -7,7 +7,7 @@ def dijkstra(graph, start_node, end_node, priority_key):
     동일한 우선순위 값을 가진 경로 중에서는 탄소 배출량이 낮은 경로를 선택합니다.
     """
     if start_node == end_node:
-        return "same_node"  # 소문자로 통일
+        return "same_node"
     
     G = nx.MultiDiGraph()
     
@@ -84,7 +84,7 @@ def dijkstra(graph, start_node, end_node, priority_key):
         return result
     
     except nx.NetworkXNoPath:
-        return "no_path"  # 소문자로 통일
+        return "no_path"
     except Exception as e:
         print(f"다익스트라 알고리즘 오류: {e}")
         return "error"  # 문제 발생 시 명확한 문자열 반환
