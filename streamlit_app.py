@@ -4,7 +4,7 @@ import streamlit as st
 
 # 페이지 설정
 st.set_page_config(
-    page_title="물류 경로 최적화",
+    page_title="Pantos Project",
     page_icon="🚢",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -88,7 +88,7 @@ def search_routes(graph, start, end, selected_priority):
 
 def main():
     """Streamlit 앱 메인 함수"""
-    st.title("🌎 국제 물류 경로 최적화")
+    st.title("🌎 LXP")
     
     # 그래프 데이터 로드
     graph = load_graph()
@@ -194,9 +194,7 @@ def main():
     else:
         # 검색 전 초기 화면
         st.markdown("""
-        ## 👋 물류 경로 최적화에 오신 것을 환영합니다
-        
-        이 애플리케이션은 국제 물류 운송 경로를 최적화하여 보여줍니다.
+        ##이 애플리케이션은 국제 물류 운송 경로를 보여줍니다.
         
         **사용 방법:**
         1. 왼쪽 사이드바에서 출발지와 도착지를 선택하세요
