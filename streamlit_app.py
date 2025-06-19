@@ -107,6 +107,7 @@ def main():
             
             # 각 우선순위별 결과 표시
             for name, data in results.items():
+                print(data)
                 days = data['time'] / 24
                 
                 with st.expander(f"⭐ {name}", expanded=True):
