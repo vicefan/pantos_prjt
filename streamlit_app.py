@@ -1,6 +1,5 @@
 from tools import load_graph, find_all_paths
 import streamlit as st
-import pandas as pd
 
 # 페이지 설정
 st.set_page_config(
