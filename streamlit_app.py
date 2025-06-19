@@ -1,5 +1,4 @@
-from tools import dijkstra
-import json
+from tools import dijkstra, load_graph, find_all_paths
 import streamlit as st
 
 # 페이지 설정
@@ -9,47 +8,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
-
-def load_graph():
-    """JSON 파일에서 그래프 데이터 로드"""
-    try:
-        with open('graph.json', 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        st.error("graph.json 파일을 찾을 수 없습니다.")
-        # 샘플 그래프 제공
-        return {
-            "Incheon": {
-                "Shanghai": [
-                    {"mode": "Sea", "time": 48, "cost": 300, "distance": 850, "carbon": 500},
-                    {"mode": "Air", "time": 2, "cost": 1500, "distance": 850, "carbon": 4000}
-                ],
-                "Vladivostok": [
-                    {"mode": "Sea", "time": 72, "cost": 400, "distance": 1000, "carbon": 600}
-                ]
-            },
-            "Shanghai": {
-                "Incheon": [
-                    {"mode": "Sea", "time": 48, "cost": 300, "distance": 850, "carbon": 500},
-                    {"mode": "Air", "time": 2, "cost": 1500, "distance": 850, "carbon": 4000}
-                ],
-                "Duisburg": [
-                    {"mode": "Rail", "time": 360, "cost": 2000, "distance": 9000, "carbon": 3000}
-                ]
-            },
-            "Vladivostok": {
-                "Duisburg": [
-                    {"mode": "Rail", "time": 240, "cost": 1800, "distance": 10000, "carbon": 2500}
-                ]
-            },
-            "Duisburg": {
-                "Warsaw": [
-                    {"mode": "Rail", "time": 24, "cost": 200, "distance": 1000, "carbon": 150},
-                    {"mode": "Truck", "time": 18, "cost": 300, "distance": 1000, "carbon": 250}
-                ]
-            },
-            "Warsaw": {}
-        }
 
 def search_routes(graph, start, end, selected_priority):
     """경로 검색 로직"""
@@ -65,14 +23,10 @@ def search_routes(graph, start, end, selected_priority):
     
     # 선택된 우선순위만 처리
     if selected_priority == '모든 경로':
-        # 모든 우선순위에 대해 경로 계산
-        for name, key in priorities.items():
-            result = dijkstra(graph, start, end, key)
-            if result == "No path found":
-                return "no_path"
-            elif result == "Same node":
-                return "same_node"
-            results[name] = result
+        all_paths = find_all_paths(graph, start, end)
+        if all_paths == "no_path":
+            return "no_path"
+        return {"모든 가능한 경로": all_paths}
     else:
         # 선택된 우선순위에 대해서만 경로 계산
         key = priorities[selected_priority]
