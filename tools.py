@@ -1,6 +1,12 @@
 import networkx as nx 
 import json
 
+def load_graph():
+    """JSON 파일에서 그래프 데이터 로드"""
+    with open('graph.json', 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+
 def dijkstra(graph, start_node, end_node, priority_key):
     """
     개선된 다익스트라 알고리즘으로 최적 경로를 찾는 함수.
@@ -90,12 +96,6 @@ def dijkstra(graph, start_node, end_node, priority_key):
     except Exception as e:
         print(f"오류 발생: {e}")
         return None
-    
-
-def load_graph():
-    """JSON 파일에서 그래프 데이터 로드"""
-    with open('graph.json', 'r', encoding='utf-8') as f:
-        return json.load(f)
     
 
 def find_all_paths(graph, start, end, max_paths=10):
