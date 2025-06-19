@@ -131,28 +131,19 @@ def find_all_paths(graph, start, end, max_paths=10):
     NetworkX를 사용하여 시작 노드에서 종료 노드까지의 모든 단순 경로를 찾는 함수
     """
     G = nx.MultiDiGraph()
-    
-    # 노드 및 엣지 추가
     for from_node, destinations in graph.items():
         for to_node, edges in destinations.items():
-            for i, edge in enumerate(edges):
-                G.add_edge(
-                    from_node, to_node, key=f"{from_node}-{to_node}-{i}", 
-                    **edge
-                )
-    
+            for edge in edges:
+                G.add_edge(from_node, to_node, **edge)
+
     try:
-        # 모든 단순 경로 찾기 (cutoff로 경로 길이 제한)
-        all_paths = list(nx.all_simple_paths(G, source=start, target=end, cutoff=6))
-        
-        if not all_paths:
+        all_node_paths = list(nx.all_simple_paths(G, source=start, target=end, cutoff=6))
+        if not all_node_paths:
             return "no_path"
-            
-        # 각 경로에 대해 모든 가능한 엣지 조합을 고려하여 경로 상세 정보 생성
+
         path_details = []
         seen = set()
-        for node_path in all_paths:
-            # 각 구간별 운송 옵션 리스트
+        for node_path in all_node_paths:
             edge_options = []
             for i in range(len(node_path) - 1):
                 from_node = node_path[i]
@@ -161,9 +152,7 @@ def find_all_paths(graph, start, end, max_paths=10):
                 for key, edge in G[from_node][to_node].items():
                     options.append(edge)
                 edge_options.append(options)
-            # 모든 운송 옵션 조합 생성
             for combo in itertools.product(*edge_options):
-                # 중복 제거: (노드 경로, 운송수단 조합) 기준
                 combo_key = (
                     tuple(node_path),
                     tuple(edge['mode'] for edge in combo)
@@ -171,7 +160,6 @@ def find_all_paths(graph, start, end, max_paths=10):
                 if combo_key in seen:
                     continue
                 seen.add(combo_key)
-                # 경로 정보 누적
                 total_time = sum(edge['time'] for edge in combo)
                 total_cost = sum(edge['cost'] for edge in combo)
                 total_distance = sum(edge['distance'] for edge in combo)
@@ -197,7 +185,6 @@ def find_all_paths(graph, start, end, max_paths=10):
                         for i in range(len(combo))
                     ]
                 })
-        # 시간 기준 정렬 및 최대 경로 제한
         path_details.sort(key=lambda x: x['time'])
         return path_details[:max_paths] if max_paths else path_details
 
