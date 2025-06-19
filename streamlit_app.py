@@ -1,8 +1,6 @@
 from tools import dijkstra
 import json
 import streamlit as st
-import networkx as nx
-import os.path
 
 # 페이지 설정
 st.set_page_config(
