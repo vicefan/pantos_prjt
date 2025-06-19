@@ -57,7 +57,6 @@ def search_routes(graph, start, end, selected_priority):
     priorities = {
         '최소 시간순': 'time',
         '최소 비용순': 'cost',
-        '최소 탄소 배출순': 'carbon',
         '최소 환적순': 'transfers'
     }
     
@@ -114,7 +113,7 @@ def main():
         )
         
         # 우선순위 선택
-        priority_options = ["모든 경로", "최소 시간순", "최소 비용순", "최소 탄소 배출순", "최소 환적순"]
+        priority_options = ["모든 경로", "최소 시간순", "최소 비용순", "최소 환적순"]
         selected_priority = st.selectbox(
             "우선순위 선택",
             priority_options,
@@ -128,6 +127,7 @@ def main():
         st.divider()
         st.write("### 정보")
         st.info("출발지와 도착지를 선택한 후 '경로 검색' 버튼을 클릭하세요.")
+        st.success("모든 경로는 동일 조건에서 탄소 배출량이 낮은 경로가 우선 선택됩니다.")
         
         # 그래프 정보 표시
         with st.expander("데이터 정보"):
@@ -204,8 +204,9 @@ def main():
         **경로 우선순위 설명:**
         - **최소 시간순**: 가장 빠른 경로
         - **최소 비용순**: 가장 저렴한 경로
-        - **최소 탄소 배출순**: 환경 친화적인 경로
         - **최소 환적순**: 환적 횟수가 적은 경로
+                    
+        **참고**: 모든 경로는 동일한 조건에서 탄소 배출량이 낮은 경로가 우선적으로 선택됩니다.
         
         왼쪽 사이드바에서 시작하세요!
         """)
