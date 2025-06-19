@@ -207,25 +207,3 @@ def find_all_paths(graph, start, end, max_paths=10):
     except Exception as e:
         print(f"경로 탐색 중 오류 발생: {str(e)}")
         return None
-
-def search_routes(graph, start, end, selected_priority):
-    """경로 검색 로직"""
-    # 모든 경로 찾기 옵션
-    if selected_priority == '모든 경로':
-        all_paths = find_all_paths(graph, start, end)
-        if all_paths == "no_path" or not all_paths:
-            return "no_path"
-        return {"모든 가능한 경로": all_paths}
-    else:
-        all_paths = find_all_paths(graph, start, end)
-        if all_paths == "no_path":
-            return "no_path"
-        # 우선순위별 정렬
-        priorities = {
-            '최소 시간순': 'time',
-            '최소 비용순': 'cost',
-            '최소 환적순': 'transfers'
-        }
-        key = priorities[selected_priority]
-        sorted_paths = sorted(all_paths, key=lambda x: x[key])
-        return {selected_priority: sorted_paths}

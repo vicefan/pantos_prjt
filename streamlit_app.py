@@ -1,4 +1,4 @@
-from tools import dijkstra, load_graph, find_all_paths
+from tools import load_graph, find_all_paths
 import streamlit as st
 import pandas as pd
 
@@ -17,22 +17,18 @@ def search_routes(graph, start, end, selected_priority):
         '최소 비용순': 'cost',
         '최소 환적순': 'transfers'
     }
-    results = {}
     if selected_priority == '모든 경로':
         all_paths = find_all_paths(graph, start, end)
         if all_paths == "no_path":
             return "no_path"
         return {"모든 가능한 경로": all_paths}
     else:
-        key = priorities[selected_priority]
-        result = dijkstra(graph, start, end, key)
-        if result == "No path found":
+        all_paths = find_all_paths(graph, start, end)
+        if all_paths == "no_path":
             return "no_path"
-        elif result == "Same node":
-            return "same_node"
-        # 리스트로 감싸서 반환
-        results[selected_priority] = [result]
-    return results
+        key = priorities[selected_priority]
+        sorted_paths = sorted(all_paths, key=lambda x: x[key])
+        return {selected_priority: sorted_paths}
 
 # Streamlit 앱 메인 함수 부분 수정
 def main():
