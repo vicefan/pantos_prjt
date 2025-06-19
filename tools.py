@@ -7,7 +7,7 @@ def dijkstra(graph, start_node, end_node, priority_key):
     동일한 우선순위 값을 가진 경로 중에서는 탄소 배출량이 낮은 경로를 선택합니다.
     """
     if start_node == end_node:
-        return "Same node"
+        return "same_node"  # 소문자로 통일
     
     G = nx.MultiDiGraph()
     
@@ -84,11 +84,10 @@ def dijkstra(graph, start_node, end_node, priority_key):
         return result
     
     except nx.NetworkXNoPath:
-        print(f"경로 없음: {start_node} -> {end_node}")
-        return "no_path"  # 대소문자 일관성 유지
+        return "no_path"  # 소문자로 통일
     except Exception as e:
-        print(f"오류 발생: {e}")
-        return None  # None으로 통일
+        print(f"다익스트라 알고리즘 오류: {e}")
+        return "error"  # 문제 발생 시 명확한 문자열 반환
 
 def load_graph():
     """JSON 파일에서 그래프 데이터 로드"""
@@ -230,28 +229,23 @@ def search_routes(graph, start, end, selected_priority):
         return {"모든 가능한 경로": all_paths}
     else:
         try:
-            # 디버그 로그 (실제 배포 시 제거)
-            print(f"우선순위: {selected_priority}, 키: {priorities.get(selected_priority)}")
-            
             # 선택된 우선순위에 대해서만 최적 경로 계산
             key = priorities[selected_priority]
             result = dijkstra(graph, start, end, key)
             
-            # 디버그 로그 (실제 배포 시 제거)
-            print(f"다익스트라 결과: {type(result)}, 값: {result}")
-            
-            # 경로가 없는 경우 처리
-            if result == "No path found" or result == "no_path":
+            # 결과 검증 및 클리닝
+            if isinstance(result, dict) and 'path_details' in result:
+                # 올바른 결과일 경우 리스트로 감싸서 반환
+                return {selected_priority: [result]}
+            elif result in ["no_path", "No path found"]:
                 return "no_path"
-            elif result == "Same node" or result == "same_node":
+            elif result in ["same_node", "Same node"]:
                 return "same_node"
-            elif result is None:
+            else:
+                # 예상치 못한 결과
+                print(f"예상치 못한 결과: {result}")
                 return "no_path"
                 
-            # 결과가 있는 경우 - 리스트 형태로 반환
-            return {selected_priority: [result]}
-            
         except Exception as e:
-            # 예외 처리 (디버그용)
             print(f"오류 발생: {str(e)}")
-            return f"error: {str(e)}"
+            return "no_path"

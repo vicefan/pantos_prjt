@@ -180,45 +180,51 @@ def main():
                     else:
                         st.warning("가능한 경로가 없습니다.")
                 else:
-                    # 단일 우선순위 경로 표시 - 리스트로 처리
+                    # 단일 우선순위 경로 표시 부분 수정
+                    # 단일 우선순위 경로 표시
                     for path in paths:
-                        days = path['time'] / 24
-                        
-                        # 경로 정보
-                        path_str = " → ".join([p['to'] for p in path['path_details']])
-                        full_path = f"{path['path_details'][0]['from']} → {path_str}"
-                        
-                        st.markdown(f"**전체 경로**: {full_path}")
-                        
-                        # 요약 정보를 열로 표시
-                        col1, col2, col3 = st.columns(3)
-                        with col1:
-                            st.metric("총 소요 시간", f"{days:.1f}일 ({path['time']}시간)")
-                        with col2:
-                            st.metric("총 비용", f"${path['cost']:,}")
-                        with col3:
-                            st.metric("환적 횟수", f"{path['transfers']}회")
-                        
-                        # 탄소 배출량
-                        st.metric("총 탄소 배출량", f"{path['carbon']:,} kg CO2e")
-                        
-                        # 구간별 상세 정보
-                        st.subheader("구간별 상세 정보")
-                        
-                        # 데이터 테이블로 변환
-                        table_data = []
-                        for segment in path['path_details']:
-                            table_data.append({
-                                "출발": segment['from'],
-                                "도착": segment['to'],
-                                "운송 수단": segment['mode'],
-                                "소요 시간(시간)": segment['time'],
-                                "비용($)": segment['cost'],
-                                "탄소 배출량(kg)": segment['carbon']
-                            })
-                        
-                        # 테이블 표시
-                        st.table(pd.DataFrame(table_data))
+                        # 문자열이 아닌 경우에만 처리
+                        if not isinstance(path, str):
+                            days = path['time'] / 24
+                            
+                            # 경로 정보
+                            path_str = " → ".join([p['to'] for p in path['path_details']])
+                            full_path = f"{path['path_details'][0]['from']} → {path_str}"
+                            
+                            st.markdown(f"**전체 경로**: {full_path}")
+                            
+                            # 요약 정보를 열로 표시
+                            col1, col2, col3 = st.columns(3)
+                            with col1:
+                                st.metric("총 소요 시간", f"{days:.1f}일 ({path['time']}시간)")
+                            with col2:
+                                st.metric("총 비용", f"${path['cost']:,}")
+                            with col3:
+                                st.metric("환적 횟수", f"{path['transfers']}회")
+                            
+                            # 탄소 배출량
+                            st.metric("총 탄소 배출량", f"{path['carbon']:,} kg CO2e")
+                            
+                            # 구간별 상세 정보
+                            st.subheader("구간별 상세 정보")
+                            
+                            # 데이터 테이블로 변환
+                            table_data = []
+                            for segment in path['path_details']:
+                                table_data.append({
+                                    "출발": segment['from'],
+                                    "도착": segment['to'],
+                                    "운송 수단": segment['mode'],
+                                    "소요 시간(시간)": segment['time'],
+                                    "비용($)": segment['cost'],
+                                    "탄소 배출량(kg)": segment['carbon']
+                                })
+                            
+                            # 테이블 표시
+                            st.table(pd.DataFrame(table_data))
+                        else:
+                            # 문자열인 경우 에러 메시지로 표시
+                            st.error(f"예상치 못한 결과: {path}")
     else:
         # 검색 전 초기 화면
         st.markdown("""
