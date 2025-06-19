@@ -96,11 +96,6 @@ def main():
         
         # 경로 검색 실행
         results = search_routes(graph, start, end, selected_priority)
-        
-        # 디버깅을 위한 로그 추가 (문제 해결 후 제거 가능)
-        st.write(f"DEBUG - 결과 유형: {type(results)}")
-        if isinstance(results, dict):
-            st.write(f"DEBUG - 결과 키: {list(results.keys())}")
 
         # 결과 처리
         if results == "no_path" or results == "No path found":  # 대소문자 통일
