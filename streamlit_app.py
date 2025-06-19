@@ -104,112 +104,77 @@ def main():
             
             # 각 우선순위별 결과 표시
             for name, paths in results.items():
-                st.subheader(f"⭐ {name}")
-                
-                # 표 형태로 요약 정보 표시
-                if name == "모든 가능한 경로":
-                    path_data = []
-                    for idx, path in enumerate(paths):
-                        nodes_str = " → ".join(path['nodes'])
-                        modes_str = " → ".join([p['mode'] for p in path['path_details']])
-                        days = path['time'] / 24
-                        
-                        path_data.append({
-                            "번호": idx + 1,
-                            "경로": nodes_str,
-                            "운송 수단": modes_str,
-                            "소요 시간": f"{days:.1f}일 ({path['time']}시간)",
-                            "비용": f"${path['cost']:,}",
-                            "탄소 배출량": f"{path['carbon']:,} kg",
-                            "환적 횟수": path['transfers']
-                        })
-                    
-                    # 데이터프레임으로 변환하여 표시
-                    if path_data:
-                        df = pd.DataFrame(path_data)
-                        st.dataframe(df, use_container_width=True)
-                        
-                        # 각 경로의 상세 정보
+                with st.expander(f"⭐ {name}", expanded=True):
+                    # 표 형태로 요약 정보 표시
+                    if name == "모든 가능한 경로":
+                        path_data = []
                         for idx, path in enumerate(paths):
-                            with st.expander(f"경로 {idx+1} 상세 정보"):
-                                # 경로 정보
-                                st.markdown(f"**전체 경로**: {' → '.join(path['nodes'])}")
-                                
-                                # 요약 정보를 열로 표시
-                                col1, col2, col3 = st.columns(3)
-                                with col1:
-                                    days = path['time'] / 24
-                                    st.metric("총 소요 시간", f"{days:.1f}일 ({path['time']}시간)")
-                                with col2:
-                                    st.metric("총 비용", f"${path['cost']:,}")
-                                with col3:
-                                    st.metric("환적 횟수", f"{path['transfers']}회")
-                                
-                                # 탄소 배출량
-                                st.metric("총 탄소 배출량", f"{path['carbon']:,} kg CO2e")
-                                
-                                # 구간별 상세 테이블
-                                st.subheader("구간별 상세 정보")
-                                segment_data = []
-                                for seg in path['path_details']:
-                                    segment_data.append({
-                                        "출발": seg['from'],
-                                        "도착": seg['to'],
-                                        "운송 수단": seg['mode'],
-                                        "소요 시간(시간)": seg['time'],
-                                        "비용($)": seg['cost'],
-                                        "탄소 배출량(kg)": seg['carbon']
-                                    })
-                                
-                                st.table(pd.DataFrame(segment_data))
-                    else:
-                        st.warning("가능한 경로가 없습니다.")
-                else:
-                    # 단일 우선순위 경로 표시 부분 수정
-                    # 단일 우선순위 경로 표시
-                    for path in paths:
-                        # 문자열이 아닌 경우에만 처리
-                        if not isinstance(path, str):
+                            nodes_str = " → ".join(path['nodes'])
+                            modes_str = " → ".join([p['mode'] for p in path['path_details']])
                             days = path['time'] / 24
-                            
-                            # 경로 정보
-                            path_str = " → ".join([p['to'] for p in path['path_details']])
-                            full_path = f"{path['path_details'][0]['from']} → {path_str}"
-                            
-                            st.markdown(f"**전체 경로**: {full_path}")
-                            
-                            # 요약 정보를 열로 표시
-                            col1, col2, col3 = st.columns(3)
-                            with col1:
-                                st.metric("총 소요 시간", f"{days:.1f}일 ({path['time']}시간)")
-                            with col2:
-                                st.metric("총 비용", f"${path['cost']:,}")
-                            with col3:
-                                st.metric("환적 횟수", f"{path['transfers']}회")
-                            
-                            # 탄소 배출량
-                            st.metric("총 탄소 배출량", f"{path['carbon']:,} kg CO2e")
-                            
-                            # 구간별 상세 정보
-                            st.subheader("구간별 상세 정보")
-                            
-                            # 데이터 테이블로 변환
-                            table_data = []
-                            for segment in path['path_details']:
-                                table_data.append({
-                                    "출발": segment['from'],
-                                    "도착": segment['to'],
-                                    "운송 수단": segment['mode'],
-                                    "소요 시간(시간)": segment['time'],
-                                    "비용($)": segment['cost'],
-                                    "탄소 배출량(kg)": segment['carbon']
-                                })
-                            
-                            # 테이블 표시
-                            st.table(pd.DataFrame(table_data))
+
+                            path_data.append({
+                                "번호": idx + 1,
+                                "경로": nodes_str,
+                                "운송 수단": modes_str,
+                                "소요 시간": f"{days:.1f}일 ({path['time']}시간)",
+                                "비용": f"${path['cost']:,}",
+                                "탄소 배출량": f"{path['carbon']:,} kg",
+                                "환적 횟수": path['transfers']
+                            })
+
+                        if path_data:
+                            df = pd.DataFrame(path_data)
+                            st.dataframe(df, use_container_width=True)
+
+                            for idx, path in enumerate(paths):
+                                with st.expander(f"경로 {idx+1} 상세 정보"):
+                                    # 경로 정보
+                                    st.markdown(f"**전체 경로**: {' → '.join(path['nodes'])}")
+                                    
+                                    # 요약 정보를 열로 표시
+                                    col1, col2, col3 = st.columns(3)
+                                    with col1:
+                                        days = path['time'] / 24
+                                        st.metric("총 소요 시간", f"{days:.1f}일 ({path['time']}시간)")
+                                    with col2:
+                                        st.metric("총 비용", f"${path['cost']:,}")
+                                    with col3:
+                                        st.metric("환적 횟수", f"{path['transfers']}회")
+                                    
+                                    # 탄소 배출량
+                                    st.metric("총 탄소 배출량", f"{path['carbon']:,} kg CO2e")
+                                    
+                                    # 구간별 상세 테이블
+                                    st.subheader("구간별 상세 정보")
+                                    segment_data = []
+                                    for seg in path['path_details']:
+                                        segment_data.append({
+                                            "출발": seg['from'],
+                                            "도착": seg['to'],
+                                            "운송 수단": seg['mode'],
+                                            "소요 시간(시간)": seg['time'],
+                                            "비용($)": seg['cost'],
+                                            "탄소 배출량(kg)": seg['carbon']
+                                        })
+                                
+                                    st.table(pd.DataFrame(segment_data))
                         else:
-                            # 문자열인 경우 에러 메시지로 표시
-                            st.error(f"예상치 못한 결과: {path}")
+                            st.warning("가능한 경로가 없습니다.")
+                    else:
+                        for idx, path in enumerate(paths):
+                            if not isinstance(path, str):
+                                days = path['time'] / 24
+                                path_str = " → ".join([p['to'] for p in path['path_details']])
+                                full_path = f"{path['path_details'][0]['from']} → {path_str}"
+                                st.markdown(f"**경로 {idx+1}:** {full_path}")
+                                st.write(f"- 소요 시간: {days:.1f}일 ({path['time']}시간)")
+                                st.write(f"- 비용: ${path['cost']:,}")
+                                st.write(f"- 탄소 배출량: {path['carbon']:,} kg")
+                                st.write(f"- 환적 횟수: {path['transfers']}")
+                            else:
+                                # 문자열인 경우 에러 메시지로 표시
+                                st.error(f"예상치 못한 결과: {path}")
     else:
         # 검색 전 초기 화면
         st.markdown("""
