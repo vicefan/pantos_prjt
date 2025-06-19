@@ -12,32 +12,26 @@ st.set_page_config(
 
 def search_routes(graph, start, end, selected_priority):
     """경로 검색 로직"""
-    # 우선순위 정의
     priorities = {
         '최소 시간순': 'time',
         '최소 비용순': 'cost',
         '최소 환적순': 'transfers'
     }
-    
-    # 결과 컨테이너 초기화
     results = {}
-    
-    # 선택된 우선순위만 처리
     if selected_priority == '모든 경로':
         all_paths = find_all_paths(graph, start, end)
         if all_paths == "no_path":
             return "no_path"
         return {"모든 가능한 경로": all_paths}
     else:
-        # 선택된 우선순위에 대해서만 경로 계산
         key = priorities[selected_priority]
         result = dijkstra(graph, start, end, key)
         if result == "No path found":
             return "no_path"
         elif result == "Same node":
             return "same_node"
-        results[selected_priority] = result
-    
+        # 리스트로 감싸서 반환
+        results[selected_priority] = [result]
     return results
 
 # Streamlit 앱 메인 함수 부분 수정
