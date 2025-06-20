@@ -10,7 +10,7 @@ def make_json():
     scope = ['https://spreadsheets.google.com/feeds',
     'https://www.googleapis.com/auth/drive']
 
-    json_key = st.secrets["gcp_service_account"]
+    json_key = dict(st.secrets["gcp_service_account"])
 
     credential = ServiceAccountCredentials.from_json_keyfile_dict(json_key, scope)
     gc = gspread.authorize(credential)
@@ -27,3 +27,5 @@ def make_json():
 
     from csv2json import c2j
     c2j(CSV_FILE, JSON_FILE)
+
+make_json()
