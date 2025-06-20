@@ -20,5 +20,5 @@ def make_json():
     df.rename(columns=df.iloc[0], inplace = True)
     df.drop(df.index[0], inplace=True)
 
-    data_list = df.to_dict(orient='records')
+    data_list = df.to_json(orient='records')
     return data_list
