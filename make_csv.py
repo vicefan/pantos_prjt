@@ -20,5 +20,5 @@ def make_csv():
     df.rename(columns=df.iloc[0], inplace = True)
     df.drop(df.index[0], inplace=True)
 
-    data_list = df.to_csv(orient='records')
+    data_list = df.to_csv(index=False)
     return data_list

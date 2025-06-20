@@ -1,5 +1,4 @@
 import csv
-import json
 from collections import defaultdict
 from make_csv import make_csv
 
