@@ -1,10 +1,11 @@
 import csv
 from collections import defaultdict
 from make_csv import make_csv
+import io
 
 def c2j():
     graph = defaultdict(lambda: defaultdict(list))
-    reader = csv.reader(csvfile=make_csv())
+    reader = csv.reader(io.StringIO(make_csv()))
     for row in reader:
         if not row or len(row) < 7:
             continue
