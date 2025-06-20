@@ -1,1 +1,3 @@
 networkx
+oauth2client
+gspread

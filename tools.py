@@ -92,39 +92,11 @@ def dijkstra(graph, start_node, end_node, priority_key):
 
 def load_graph():
     """JSON 파일에서 그래프 데이터 로드"""
-    try:
-        with open('graph.json', 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        # 샘플 그래프 제공
-        return {
-            "Incheon": {
-                "Shanghai": [
-                    {"mode": "Sea", "time": 48, "cost": 300, "distance": 850, "carbon": 500},
-                    {"mode": "Air", "time": 2, "cost": 1500, "distance": 850, "carbon": 4000}
-                ],
-                "Vladivostok": [
-                    {"mode": "Sea", "time": 72, "cost": 400, "distance": 1000, "carbon": 600}
-                ]
-            },
-            "Shanghai": {
-                "Duisburg": [
-                    {"mode": "Rail", "time": 360, "cost": 2000, "distance": 9000, "carbon": 3000}
-                ]
-            },
-            "Vladivostok": {
-                "Duisburg": [
-                    {"mode": "Rail", "time": 240, "cost": 1800, "distance": 10000, "carbon": 2500}
-                ]
-            },
-            "Duisburg": {
-                "Warsaw": [
-                    {"mode": "Rail", "time": 24, "cost": 200, "distance": 1000, "carbon": 150},
-                    {"mode": "Truck", "time": 18, "cost": 300, "distance": 1000, "carbon": 250}
-                ]
-            },
-            "Warsaw": {}
-        }
+    from make_json import make_json
+    make_json()
+    with open('src/test.json', 'r', encoding='utf-8') as f:
+        return json.load(f)
+    
 
 def find_all_paths(graph, start, end, max_paths=10):
     """

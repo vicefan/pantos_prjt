@@ -1,0 +1,62 @@
+{
+    "출발지1": {
+        "도착지1": [
+            {
+                "mode": "mode내용",
+                "time": "time내용",
+                "cost": "cost내용",
+                "distance": "distance내용",
+                "carbon": "carbon내용"
+            }
+        ],
+        "도착지2": [
+            {
+                "mode": "mode내용",
+                "time": "time내용",
+                "cost": "cost내용",
+                "distance": "distance내용2",
+                "carbon": "carbon내용"
+            }
+        ]
+    },
+    "출발지2": {
+        "도착지1": [
+            {
+                "mode": "mode내용",
+                "time": "time내용",
+                "cost": "cost내용",
+                "distance": "distance내용",
+                "carbon": "carbon내용"
+            }
+        ],
+        "도착지2": [
+            {
+                "mode": "mode내용",
+                "time": "time내용",
+                "cost": "cost내용",
+                "distance": "distance내용",
+                "carbon": "carbon내용"
+            }
+        ],
+        "도착지3": [
+            {
+                "mode": "mode내용",
+                "time": "time내용",
+                "cost": "cost내용",
+                "distance": "distance내용",
+                "carbon": "carbon내용"
+            }
+        ]
+    },
+    "출발지3": {
+        "도착지1": [
+            {
+                "mode": "mode내용",
+                "time": "time내용",
+                "cost": "cost내용",
+                "distance": "distance내용",
+                "carbon": "carbon내용"
+            }
+        ]
+    }
+}
