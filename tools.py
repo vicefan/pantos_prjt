@@ -93,9 +93,7 @@ def dijkstra(graph, start_node, end_node, priority_key):
 def load_graph():
     """JSON 파일에서 그래프 데이터 로드"""
     from make_json import make_json
-    make_json()
-    with open('src/test.json', 'r', encoding='utf-8') as f:
-        return json.load(f)
+    return make_json()
     
 
 def find_all_paths(graph, start, end, max_paths=10):

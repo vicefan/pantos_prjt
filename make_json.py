@@ -4,9 +4,6 @@ import gspread
 import streamlit as st
 
 def make_json():
-    CSV_FILE = r'src\csv_example.csv'
-    JSON_FILE = r'src\test.json'
-
     scope = ['https://spreadsheets.google.com/feeds',
     'https://www.googleapis.com/auth/drive']
 
@@ -23,9 +20,5 @@ def make_json():
     df.rename(columns=df.iloc[0], inplace = True)
     df.drop(df.index[0], inplace=True)
 
-    df.to_csv(r'src\csv_example.csv', index=False, encoding='utf-8-sig')
-
-    from csv2json import c2j
-    c2j(CSV_FILE, JSON_FILE)
-
-make_json()
+    data_list = df.to_dict(orient='records')
+    return data_list
