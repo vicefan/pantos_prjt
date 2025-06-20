@@ -1,4 +1,5 @@
-from tools import load_graph, find_all_paths
+from tools import find_all_paths
+from csv2json import c2j
 import streamlit as st
 
 # 페이지 설정
@@ -38,7 +39,7 @@ def main():
         st.header("검색 설정")
         
         # 그래프 데이터 로드
-        graph = load_graph()
+        graph = c2j()
         nodes = list(graph.keys())
         
         # 출발지 및 도착지 선택

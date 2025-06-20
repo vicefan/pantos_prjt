@@ -3,7 +3,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import gspread
 import streamlit as st
 
-def make_json():
+def make_csv():
     scope = ['https://spreadsheets.google.com/feeds',
     'https://www.googleapis.com/auth/drive']
 
@@ -20,5 +20,5 @@ def make_json():
     df.rename(columns=df.iloc[0], inplace = True)
     df.drop(df.index[0], inplace=True)
 
-    data_list = df.to_json(orient='records')
+    data_list = df.to_csv(orient='records')
     return data_list
