@@ -17,8 +17,8 @@ def make_csv():
 
 
     df = pd.DataFrame(sheet.get_all_values())
-    df.rename(columns=df.iloc[0], inplace = True)
-    df.drop(df.index[0], inplace=True)
+    df.rename(columns=df.iloc[0], inplace=True)
+    df = df.drop(df.index[0]).reset_index(drop=True)
 
     data_list = df.to_csv(index=False)
     return data_list
