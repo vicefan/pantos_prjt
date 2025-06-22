@@ -20,5 +20,8 @@ def make_csv():
     df.rename(columns=df.iloc[0], inplace=True)
     df = df.drop(df.index[0]).reset_index(drop=True)
 
+    # df를 streamlit에 표시
+    st.dataframe(df)
+
     data_list = df.to_csv(index=False)
     return data_list
