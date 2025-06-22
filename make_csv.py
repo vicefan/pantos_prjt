@@ -15,8 +15,8 @@ def make_csv():
     doc = gc.open_by_url(spreadsheet_url)
     sheet = doc.worksheet("csv_Example")
 
-
-    df = pd.DataFrame(data=sheet.get_all_values(), index=sheet.row_values(1))
+    values = sheet.get_all_values()
+    df = pd.DataFrame(values[1:], columns=values[0])
 
     # df를 streamlit에 표시
     print(df)
