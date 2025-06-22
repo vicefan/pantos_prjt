@@ -19,7 +19,7 @@ def make_csv():
     df = pd.DataFrame(sheet.get_all_values()).drop(df.index[0])
 
     # df를 streamlit에 표시
-    st.dataframe(df)
+    print(df)
 
     data_list = df.to_csv(index=False)
     return data_list
