@@ -16,7 +16,7 @@ def make_csv():
     sheet = doc.worksheet("csv_Example")
 
 
-    df = pd.DataFrame(sheet.get_all_values()).drop(df.index[0])
+    df = pd.DataFrame(data=sheet.get_all_values(), index=sheet.row_values(1))
 
     # df를 streamlit에 표시
     print(df)
