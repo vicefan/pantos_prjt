@@ -6,6 +6,7 @@ import io
 def c2j():
     graph = defaultdict(lambda: defaultdict(list))
     reader = csv.reader(io.StringIO(make_csv()))
+    next(reader)
     for row in reader:
         if not row or len(row) < 7:
             continue
