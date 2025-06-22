@@ -1,5 +1,4 @@
 import networkx as nx
-import json
 import itertools
 
 def dijkstra(graph, start_node, end_node, priority_key):
@@ -130,6 +129,8 @@ def find_all_paths(graph, start, end, max_paths=10):
                 total_distance = sum(edge['distance'] for edge in combo)
                 total_carbon = sum(edge['carbon'] for edge in combo)
                 transfers = len(node_path) - 2
+                if transfers < 0:
+                    transfers = 0
                 path_details.append({
                     'nodes': node_path,
                     'time': total_time,
