@@ -11,11 +11,12 @@ def c2j():
             continue
         from_node, to_node, mode, time, cost, distance, carbon = row
         edge = {
+            # 변수 별로 타입 변환 해야댐
             "mode": mode,
-            "time": time,
-            "cost": cost,
-            "distance": distance,
-            "carbon": carbon
+            "time": int(time),
+            "cost": int(cost),
+            "distance": int(distance),
+            "carbon": float(carbon)
         }
         graph[from_node][to_node].append(edge)
 
