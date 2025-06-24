@@ -19,7 +19,7 @@ def get_data():
     df = pd.DataFrame(data=values[1:], columns=values[0])
     df = df[[col for col in df.columns if col and not col.isspace()]]
 
-    result = df[df['엣지 이름'].str.endswith('경유') or df['엣지 이름'].str == '-']
+    result = df[df['엣지 이름'].str.endswith('경유') or df['엣지 이름'].str == '직송']
 
     data_list = result.to_dict(orient='records')
     for data in data_list:
