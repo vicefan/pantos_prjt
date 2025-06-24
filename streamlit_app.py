@@ -18,7 +18,7 @@ st.markdown(css_style, unsafe_allow_html=True)
 st.markdown("<h1>예상 물류비 조회</h1>", unsafe_allow_html=True)
 st.markdown("<hr style='border: none; height: 2px; background-color: #E3ECF7; margin: 20px 0;'>", unsafe_allow_html=True)
 
-# --- 운송모드 + 옵션 한 줄 배치 ---
+# --- 운송모드 ---
 st.markdown("""
 <div class="option-row">
     <span class="option-label">운송모드</span>
@@ -33,16 +33,20 @@ selected_mode = option_menu(
     styles={
         "container": {"background-color": "#F5F7FA"},
         "icon": {"font-size": "20px"},
+        "nav": {"gap": "10px"},
         "nav-link": {
             "font-size": "16px",
             "text-align": "center",
             "padding": "16px 18px",
-            "margin": "5px"
-        }
+            "margin": "5px",
+            "border": "1px solid #E3ECF7",
+            "border-radius": "8px"
+        },
+        
     }
 )
 
-st.markdown("<hr style='border: none; height: 2px; background-color: #1976D2; margin: 20px 0;'>", unsafe_allow_html=True)
+st.markdown("<hr style='border: none; height: 2px; background-color: #E3ECF7; margin: 20px 0;'>", unsafe_allow_html=True)
 
 st.markdown("""
 </div>
