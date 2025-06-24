@@ -10,7 +10,7 @@ st.set_page_config(
 )
 
 # --- CSS 스타일 정의 ---
-with open("style.css", "r") as f:
+with open("css_style.txt", "r") as f:
     css_style = f.read()
 st.markdown(css_style, unsafe_allow_html=True)
 
