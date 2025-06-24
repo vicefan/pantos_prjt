@@ -42,6 +42,8 @@ selected_mode = option_menu(
     }
 )
 
+st.markdown("<hr style='border: none; height: 2px; background-color: #1976D2; margin: 20px 0;'>", unsafe_allow_html=True)
+
 st.markdown("""
 </div>
 <div class="option-row">
