@@ -19,9 +19,8 @@ def get_data():
     df = pd.DataFrame(data=values[1:], columns=values[0])
     df = df[[col for col in df.columns if col and not col.isspace()]]
 
-    result = df[df['엣지 이름'].str.endswith('경유') or df['엣지 이름'].str == '직송']
 
-    data_list = result.to_dict(orient='records')
+    data_list = df.to_dict(orient='records')
     for data in data_list:
         data['비용(USD/TEU)'] = int(data['비용(USD/TEU)']) if data['비용(USD/TEU)'] else 0
         data['소요일'] = int(data['소요일']) if data['소요일'] else 0
