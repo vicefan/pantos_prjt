@@ -25,14 +25,15 @@ def get_data():
     for data in data_list:
         data['비용(USD/TEU)'] = int(data['비용(USD/TEU)']) if data['비용(USD/TEU)'] else 0
         data['소요일'] = int(data['소요일']) if data['소요일'] else 0
-        data['환적 횟수'] = len(data['전체 경로'].split('-'))
         data['거리'] = int(data['거리']) if data['거리'] else 0
         data['탄소배출량'] = float(data['탄소배출량']) if data['탄소배출량'] else 0
         if data['엣지 이름'] == '-':
             data['엣지 이름'] = '직송'
             data['전체 경로'] = '직송'
+            data['환적 횟수'] = 0
             continue
-        data['엣지 이름'] = data['엣지 이름'].strip() 
-        data['전체 경로'] = data['전체 경로'].strip() 
+        data['엣지 이름'] = data['엣지 이름'].strip()
+        data['전체 경로'] = data['전체 경로'].strip()
+        data['환적 횟수'] = len(data['전체 경로'].split('-'))
     
     return data_list
