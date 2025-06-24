@@ -16,19 +16,19 @@ c1, c2 = st.columns(2)
 with c1:
     select_start = st.selectbox(
         label="출발지",
-        options=["최소 비용순", "최소 환적순"],
-        placeholder="Choose option to sort the routes",
+        options=["인천", "부산"],
+        placeholder="Choose starting point",
         index=None
     )
-    
+
     data = get_data(select_start)
 
 with c2:
     # 비용순으로 볼건지 환적순으로 볼건지 선택하는 selectbox
     select_listbox = st.selectbox(
         label="분류 기준",
-        options=["인천", "부산"],
-        placeholder="Choose starting point",
+        options=["최소 비용순", "최소 환적순"],
+        placeholder="Choose option to sort the routes",
         index=None
     )
 
