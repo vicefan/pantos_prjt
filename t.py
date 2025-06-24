@@ -2,17 +2,53 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 from get_spread_data import get_data
 
-# 간단한 페이지 설정
-st.set_page_config(
-    page_title="Pantos Project",
-    page_icon="🚢",
-    layout="wide"
-)
+st.set_page_config(layout="wide")
 
 # --- CSS 스타일 정의 ---
-with open("style.css", "r") as f:
-    css_style = f.read()
-st.markdown(css_style, unsafe_allow_html=True)
+st.markdown("""
+<style>
+.block-container {
+    max-width: 900px !important;
+    margin: 40px auto 40px auto;
+    padding: 32px 24px;
+    background: #F5F7FA;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.06);
+}
+h1 {
+    color: #1976D2;
+    font-weight: 700;
+    text-align: center;
+}
+.stSelectbox > div > div {
+    background: #fff !important;
+    border-radius: 8px !important;
+    border: 1px solid #E3ECF7 !important;
+}
+.stButton > button {
+    background-color: #1976D2 !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    padding: 0.5em 2em !important;
+    margin-left: 10px;
+}
+.option-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 24px;
+    margin-top: 24px;
+}
+.option-label {
+    font-weight: bold;
+    font-size: 16px;
+    color: #555;
+    margin-right: 10px;
+    min-width: 48px;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # --- 제목 ---
 st.markdown("<h1>예상 물류비 조회</h1>", unsafe_allow_html=True)
