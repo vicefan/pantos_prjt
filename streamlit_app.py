@@ -12,16 +12,25 @@ st.set_page_config(
 # 제목 지정
 st.title("예상 물류비 조회")
 
-# 스프레드시트에서 데이터 가져오기
-data = get_data()
+c1, c2 = st.columns(2)
+with c1:
+    select_start = st.selectbox(
+        label="출발지",
+        options=["최소 비용순", "최소 환적순"],
+        placeholder="Choose option to sort the routes",
+        index=None
+    )
+    
+    data = get_data(select_start)
 
-# 비용순으로 볼건지 환적순으로 볼건지 선택하는 selectbox
-select_listbox = st.selectbox(
-    label="분류 기준",
-    options=["최소 비용순", "최소 환적순"],
-    placeholder="Choose option to sort the routes",
-    index=None
-)
+with c2:
+    # 비용순으로 볼건지 환적순으로 볼건지 선택하는 selectbox
+    select_listbox = st.selectbox(
+        label="분류 기준",
+        options=["인천", "부산"],
+        placeholder="Choose starting point",
+        index=None
+    )
 
 # 위에 selectbox에서 선택한 값에 따라 데이터 정렬 및 출력
 if select_listbox == "최소 비용순":

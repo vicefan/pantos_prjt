@@ -3,7 +3,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import gspread
 import streamlit as st
 
-def get_data():
+def get_data(start):
     scope = ['https://spreadsheets.google.com/feeds',
     'https://www.googleapis.com/auth/drive']
 
@@ -20,6 +20,7 @@ def get_data():
     df = df[[col for col in df.columns if col and not col.isspace()]]
 
 
+
     data_list = df.to_dict(orient='records')
     for data in data_list:
         data['비용(USD/TEU)'] = int(data['비용(USD/TEU)']) if data['비용(USD/TEU)'] else 0
@@ -32,5 +33,8 @@ def get_data():
         data['엣지 이름'] = data['엣지 이름'].strip()
         data['전체 경로'] = data['전체 경로'].strip()
         data['환적 횟수'] = len(data['전체 경로'].split('-'))
+    
+    if start == "인천":
+        data_list = [d for d in data_list if '항공운송' in d['모드']]
     
     return data_list
