@@ -27,9 +27,7 @@ def get_data():
         data['소요일'] = int(data['소요일']) if data['소요일'] else 0
         data['거리'] = int(data['거리']) if data['거리'] else 0
         data['탄소배출량'] = float(data['탄소배출량']) if data['탄소배출량'] else 0
-        if data['엣지 이름'] == '-':
-            data['엣지 이름'] = '직송'
-            data['전체 경로'] = '직송'
+        if data['엣지 이름'] == '직송':
             data['환적 횟수'] = 0
             continue
         data['엣지 이름'] = data['엣지 이름'].strip()
