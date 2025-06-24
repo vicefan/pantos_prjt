@@ -35,6 +35,7 @@ def get_data(start):
         data['환적 횟수'] = len(data['전체 경로'].split('-'))
     
     if start == "인천":
-        data_list = [d for d in data_list if '항공운송' in d['모드']]
-    
-    return data_list
+        return [d for d in data_list if '항공운송' in d['모드']]
+    else:
+        # 빼고 나머지
+        return [d for d in data_list if '항공운송' not in d['모드']]
