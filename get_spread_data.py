@@ -15,8 +15,10 @@ def get_data():
     doc = gc.open_by_url(spreadsheet_url)
     sheet = doc.worksheet("csv_Example")
 
-    values = sheet.get_all_values()
+    values = sheet.get_all_values(pad_values=True)
     df = pd.DataFrame(data=values[1:], columns=values[0])
+    df = df[df[df.columns[0]].notnull() and df[df.columns[0]] != '']
+
     result = df[df['엣지 이름'].str.endswith('경유')]
 
     data_list = result.to_dict(orient='records')
