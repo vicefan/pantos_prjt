@@ -1,2 +1,3 @@
 oauth2client
 gspread
+streamlit_option_menu
