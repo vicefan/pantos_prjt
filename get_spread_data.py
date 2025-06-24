@@ -15,10 +15,9 @@ def get_data():
     doc = gc.open_by_url(spreadsheet_url)
     sheet = doc.worksheet("csv_Example")
 
-    values = sheet.get_all_values(pad_values=True)
+    values = sheet.get_all_values()
     df = pd.DataFrame(data=values[1:], columns=values[0])
-    first_col = df.columns[0]
-    df = df[df[first_col].notnull() & (df[first_col] != '')]
+    df = df[[col for col in df.columns if col and not col.isspace()]]
 
     result = df[df['엣지 이름'].str.endswith('경유')]
 
