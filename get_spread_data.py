@@ -17,7 +17,8 @@ def get_data():
 
     values = sheet.get_all_values(pad_values=True)
     df = pd.DataFrame(data=values[1:], columns=values[0])
-    df = df[df[df.columns[0]].notnull() and df[df.columns[0]] != '']
+    first_col = df.columns[0]
+    df = df[df[first_col].notnull() & (df[first_col] != '')]
 
     result = df[df['엣지 이름'].str.endswith('경유')]
 
