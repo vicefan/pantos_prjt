@@ -63,6 +63,7 @@ def get_data(start, end="로테르담"):
     if start == "인천":
         tmp = [d for d in data_list if '항공운송' in d['모드']]
         for d in tmp:
+            # 엣지 이름이 '직송'인 경우 전체 경로를 출발지와 도착지로 설정
             if d['엣지 이름'] == '직송':
                 d['전체 경로'] = f"{start}-{end}"
                 continue
@@ -72,6 +73,7 @@ def get_data(start, end="로테르담"):
         # 출발지가 부산이면 항공운송 모드가 포함되지 않은 데이터만 반환
         tmp = [d for d in data_list if '항공운송' not in d['모드']]
         for d in tmp:
+            # 엣지 이름이 '직송'인 경우 전체 경로를 출발지와 도착지로 설정
             if d['엣지 이름'] == '직송':
                 d['전체 경로'] = f"{start}-{end}"
                 continue

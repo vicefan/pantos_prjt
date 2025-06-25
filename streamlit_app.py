@@ -60,7 +60,7 @@ st.markdown("""
     <span class="option-label">옵션</span>
 """, unsafe_allow_html=True)
 
-# 출발지 | 분류 기준 | 조회하기 버튼
+# 출발지 | 도착지 | 분류 기준 | 조회하기 버튼
 col1, col2, col3, col4 = st.columns([1.5, 1.5 ,1.5, 1]) # 숫자는 각각의 너비 비율
 
 # 출발지 column
@@ -73,8 +73,9 @@ with col1:
         index=None,
         key="start"
     )
+# 도착지 column
 with col2:
-    # 출발지 선택 박스
+    # 도착지 선택 박스
     select_end = st.selectbox(
         label="도착지",
         options=["로테르담"],
@@ -122,26 +123,26 @@ if search_clicked: # 조회하기 버튼 클릭 시 동작
         # 정렬
         if select_listbox == "최소 비용순":
             result = sorted(data, key=lambda x: (x['비용(USD/TEU)'], x["탄소배출량"]))
-            st.markdown('<div style="font-size:15px; color:#888; margin-bottom:8px;">최소 비용순으로 정렬된 경로</div>', unsafe_allow_html=True)
         elif select_listbox == "최단 거리순":
-            result = sorted(data, key=lambda x: (x['거리'], x['비용(USD/TEU)'], x["탄소배출량"]))
-            st.markdown('<div style="font-size:15px; color:#888; margin-bottom:8px;">최단 거리순으로 정렬된 경로</div>', unsafe_allow_html=True)
+            result = sorted(data, key=lambda x: (x['거리'], x['비용(USD/TEU)'], x["탄소배출량"])) # 거리 > 비용 > 탄소배출량 순으로 정렬
         elif select_listbox == "최소 환적순":
-            result = sorted(data, key=lambda x: (x['환적 횟수'], x['비용(USD/TEU)'], x["탄소배출량"]))
-            st.markdown('<div style="font-size:15px; color:#888; margin-bottom:8px;">최소 환적순으로 정렬된 경로</div>', unsafe_allow_html=True)
+            result = sorted(data, key=lambda x: (x['환적 횟수'], x['비용(USD/TEU)'], x["탄소배출량"])) # 환적 횟수 > 비용 > 탄소배출량 순으로 정렬
+        
+        # ~순인지 제시
+        st.markdown(f'<div style="font-size:15px; color:#888; margin-bottom:8px;">{select_listbox}으로 정렬된 경로</div>', unsafe_allow_html=True)
 
-        # 카드형 결과 출력
+        # 카드형으로 결과 출력
         card_html = ""
         for row in result:
             card_html += f"""
             <div style="border-radius: 16px; box-shadow: 0 2px 8px rgba(25, 118, 210, 0.06); border: 1.5px solid #f5eaea; margin-bottom: 24px; overflow: hidden;">
-                <!-- 상단 경로(핑크) -->
+                <!-- 경로 표시(핑크색 칸) -->
                 <div style="background: #fff6f4; padding: 22px 32px 18px 32px;">
                     <span style="display:inline-flex; align-items:center; background:#fff; border-radius: 999px; padding:10px 22px; font-size:18px; font-weight:600; color:#1976D2; box-shadow:0 1px 4px #eee;">
                         {row['전체 경로'].replace('-', '<span style="margin: 0 12px; color:#888;">&#8594;</span>')}
                     </span>
                 </div>
-                <!-- 하단 정보(흰색) -->
+                <!-- 상세 정보 표시(흰색 칸) -->
                 <div style="background: #fff; padding: 22px 32px 18px 32px; display: flex; align-items: center; gap: 32px;">
                     <div style="flex:1;">
                         <b>예상 운임</b><br>
