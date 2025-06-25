@@ -30,6 +30,7 @@ st.markdown("""
 
 # 운송모드 선택 버튼?
 selected_mode = option_menu(
+    menu_title=None,
     options=["해운", "항공", "철도", "복합"],
     icons=['truck', 'airplane', 'train-front', 'box-seam'],
     orientation="horizontal",
