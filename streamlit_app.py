@@ -1,7 +1,8 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
-# get_spread_data.py에서 get_data 함수를 가져옴
+# 폴더 내 get_spread_data.py에서 get_data 함수를 가져옴
 from get_spread_data import get_data
+
 
 # 페이지 제목, 아이콘 설정 및 [wide, centered] 중 택 1
 st.set_page_config(
@@ -90,13 +91,21 @@ with col3:
 st.markdown("</div>", unsafe_allow_html=True)
 
 if search_clicked: # 조회하기 버튼 클릭 시 동작
-    # 출발지와 분류 기준이 모두 선택되었는지 확인
-    # 만약 둘 중 하나라도 선택되지 않았다면 경고 메시지 출력
-    if not select_start or not select_listbox:
-        st.warning("출발지와 분류 기준을 모두 선택해 주세요.")
-    # 둘 다 선택되었다면 get_data 함수를 호출(/출발지/를 파라미터로 사용)하여 데이터를 가져옴
+    # 출발지, 분류 기준, 운송모드가 모두 선택되었는지 확인
+    if not select_start or not select_listbox or not selected_mode:
+        bool_dict = {select_start: "출발지", select_listbox: "분류 기준", selected_mode: "운송모드"}
+        # 선택되지 않은 항목들을 찾아서 경고 메시지 출력
+        not_selected = [v for k, v in bool_dict.items() if not k]
+        st.warning(f"다음 항목을 선택해주세요: {', '.join(not_selected)}")
+    # 다 선택되었다면 get_data 함수를 호출(/출발지/를 파라미터로 사용)하여 데이터를 가져옴
     else:
         data = get_data(select_start)
+        # 선택된 운송모드에 따라 데이터 필터링
+        if selected_mode == "복합":
+            data = [d for d in data if '+' in d['모드']]
+        else:
+            data = [d for d in data if selected_mode in d['모드']]
+
         if select_listbox == "최소 비용순":
             st.write("최소 비용순으로 정렬된 경로를 보여줍니다.")
             # 비용 순 정렬 후 탄소 배출량 순 정렬
