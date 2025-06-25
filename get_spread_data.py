@@ -7,7 +7,7 @@ import gspread
 import streamlit as st
 
 
-def get_data(start):
+def get_data(start, end="로테르담"):
     # 구글 스프레드시트 인증 + 데이터 가져오는 링크
     scope = ['https://spreadsheets.google.com/feeds',
     'https://www.googleapis.com/auth/drive']
@@ -44,7 +44,7 @@ def get_data(start):
         data['비용(USD/TEU)'] = int(data['비용(USD/TEU)']) if data['비용(USD/TEU)'] else 0
         data['소요일'] = int(data['소요일']) if data['소요일'] else 0
         data['거리'] = int(data['거리']) if data['거리'] else 0
-        data['탄소배출량'] = float(data['탄소배출량']) if data['탄소배출량'] else 0
+        data['탄소배출량'] = int(data['탄소배출량']) if data['탄소배출량'] else 0
 
         # 엣지 이름이 '직송'인 경우 환적 횟수 = 0, 엣지이름이랑 전체경로도 직송이므로 continue
         if data['엣지 이름'] == '직송':
@@ -61,7 +61,19 @@ def get_data(start):
 
     # 출발지가 인천이면 항공운송 모드가 포함된 데이터만 반환
     if start == "인천":
-        return [d for d in data_list if '항공운송' in d['모드']]
+        tmp = [d for d in data_list if '항공운송' in d['모드']]
+        for d in tmp:
+            if d['엣지 이름'] == '직송':
+                d['전체 경로'] = f"{start}-{end}"
+                continue
+            d['전체 경로'] = f"{start}-{d['전체 경로']}-{end}"
+        return tmp
     else:
         # 출발지가 부산이면 항공운송 모드가 포함되지 않은 데이터만 반환
-        return [d for d in data_list if '항공운송' not in d['모드']]
+        tmp = [d for d in data_list if '항공운송' not in d['모드']]
+        for d in tmp:
+            if d['엣지 이름'] == '직송':
+                d['전체 경로'] = f"{start}-{end}"
+                continue
+            d['전체 경로'] = f"{start}-{d['전체 경로']}-{end}"
+        return tmp

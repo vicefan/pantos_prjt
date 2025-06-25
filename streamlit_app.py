@@ -85,7 +85,7 @@ with col3:
     # 분류 기준 선택 박스
     select_listbox = st.selectbox(
         label="분류 기준",
-        options=["최소 비용순", "최소 환적순"],
+        options=["최소 비용순", "최단 거리순" ,"최소 환적순"],
         placeholder="분류 기준을 선택하세요.",
         index=None,
         key="sort"
@@ -107,8 +107,8 @@ if search_clicked: # 조회하기 버튼 클릭 시 동작
         st.warning(f"다음 항목을 선택해주세요: {', '.join(not_selected)}")
     # 다 선택되었다면 get_data 함수를 호출(/출발지/를 파라미터로 사용)하여 데이터를 가져옴
     else:
-        data = get_data(select_start)
-        # 선택된 운송모드에 따라 데이터 필터링
+        data = get_data(select_start, select_end)
+        # 운송모드 필터링
         if selected_mode == "복합":
             data = [d for d in data if '+' in d['모드']]
         else:
@@ -119,13 +119,48 @@ if search_clicked: # 조회하기 버튼 클릭 시 동작
             }
             data = [d for d in data if processed_mode[selected_mode] in d['모드']]
 
+        # 정렬
         if select_listbox == "최소 비용순":
-            st.write("최소 비용순으로 정렬된 경로를 보여줍니다.")
-            # 비용 순 정렬 후 탄소 배출량 순 정렬
             result = sorted(data, key=lambda x: (x['비용(USD/TEU)'], x["탄소배출량"]))
-            st.dataframe(result, use_container_width=True)
+            st.markdown('<div style="font-size:15px; color:#888; margin-bottom:8px;">최소 비용순으로 정렬된 경로</div>', unsafe_allow_html=True)
+        elif select_listbox == "최단 거리순":
+            result = sorted(data, key=lambda x: (x['거리'], x['비용(USD/TEU)'], x["탄소배출량"]))
+            st.markdown('<div style="font-size:15px; color:#888; margin-bottom:8px;">최단 거리순으로 정렬된 경로</div>', unsafe_allow_html=True)
         elif select_listbox == "최소 환적순":
-            st.write("최소 환적순으로 정렬된 경로를 보여줍니다.")
-            # 환적 횟수 순 정렬 후 탄소 배출량 순 정렬
-            result = sorted(data, key=lambda x: (x['환적 횟수'], x["탄소배출량"]))
-            st.dataframe(result, use_container_width=True)
+            result = sorted(data, key=lambda x: (x['환적 횟수'], x['비용(USD/TEU)'], x["탄소배출량"]))
+            st.markdown('<div style="font-size:15px; color:#888; margin-bottom:8px;">최소 환적순으로 정렬된 경로</div>', unsafe_allow_html=True)
+
+        # 카드형 결과 출력
+        card_html = ""
+        for row in result:
+            card_html += f"""
+            <div style="border-radius: 16px; box-shadow: 0 2px 8px rgba(25, 118, 210, 0.06); border: 1.5px solid #f5eaea; margin-bottom: 24px; overflow: hidden;">
+                <!-- 상단 경로(핑크) -->
+                <div style="background: #fff6f4; padding: 22px 32px 18px 32px;">
+                    <span style="display:inline-flex; align-items:center; background:#fff; border-radius: 999px; padding:10px 22px; font-size:18px; font-weight:600; color:#1976D2; box-shadow:0 1px 4px #eee;">
+                        {row['전체 경로'].replace('-', '<span style="margin: 0 12px; color:#888;">&#8594;</span>')}
+                    </span>
+                </div>
+                <!-- 하단 정보(흰색) -->
+                <div style="background: #fff; padding: 22px 32px 18px 32px; display: flex; align-items: center; gap: 32px;">
+                    <div style="flex:1;">
+                        <b>예상 운임</b><br>
+                        <span style="font-size:20px; color:#222;">$ {row['비용(USD/TEU)']:,}</span>
+                    </div>
+                    <div style="flex:1;">
+                        <b>소요일</b><br>
+                        <span style="font-size:20px; color:#1976D2;">{row['소요일']}</span>
+                    </div>
+                    <div style="flex:1;">
+                        <b>환적 횟수</b><br>
+                        <span style="font-size:20px; color:#1976D2;">{row['환적 횟수']}</span>
+                    </div>
+                    <div style="flex:1;">
+                        <b>탄소 배출량</b><br>
+                        <span style="font-size:20px; color:#1976D2;">{row['탄소배출량']}</span>
+                    </div>
+                </div>
+            </div>
+            """
+
+        st.markdown(card_html, unsafe_allow_html=True)
