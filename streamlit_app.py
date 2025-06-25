@@ -4,7 +4,7 @@ from streamlit_option_menu import option_menu
 from get_spread_data import get_data
 
 
-# 페이지 제목, 아이콘 설정 및 [wide, centered] 중 택 1
+# 페이지 제목, 아이콘 설정 & [wide, centered] 중 택 1
 st.set_page_config(
     page_title="Pantos Project",
     page_icon="🚢",
@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 # CSS 스타일 설정
-with open("css_style.txt", "r") as f:
+with open("css_style.txt", "r") as f: # 지저분해서 css_style.txt 파일로 따로 뗌
     css_style = f.read()
 # st.markdown 을 사용하여 CSS 스타일 적용
 st.markdown(css_style, unsafe_allow_html=True)
@@ -128,7 +128,7 @@ if search_clicked: # 조회하기 버튼 클릭 시 동작
         elif select_listbox == "최소 환적순":
             result = sorted(data, key=lambda x: (x['환적 횟수'], x['비용(USD/TEU)'], x["탄소배출량"])) # 환적 횟수 > 비용 > 탄소배출량 순으로 정렬
         
-        # ~순인지 제시
+        # ~순 알려주는 텍스트
         st.markdown(f'<div style="font-size:15px; color:#888; margin-bottom:8px;">{select_listbox}으로 정렬된 경로</div>', unsafe_allow_html=True)
 
         # 카드형으로 결과 출력
