@@ -1,17 +1,15 @@
 [theme]
 base = "light"
-primaryColor = "#1976D2"           # Pantos Blue
-backgroundColor = "#F5F7FA"        # Soft light gray
-secondaryBackgroundColor = "#E3ECF7" # Slightly darker for widgets
-textColor = "#222222"              # Almost black
-linkColor = "#1565C0"              # Darker blue for links
-codeBackgroundColor = "#F0F4F8"    # Light blue-gray for code blocks
+primaryColor = "#1976D2"
+backgroundColor = "#F5F7FA"
+secondaryBackgroundColor = "#E3ECF7"
+textColor = "#222222"
+linkColor = "#1565C0"
+codeBackgroundColor = "#F0F4F8"
 font = "sans-serif"
 headingFont = "sans-serif"
 baseRadius = "0.5rem"
-buttonRadius = "1rem"
 borderColor = "#B0BEC5"
-dataframeBorderColor = "#90CAF9"
 showWidgetBorder = true
 baseFontSize = 18
 showSidebarBorder = true

@@ -94,9 +94,9 @@ st.markdown("</div>", unsafe_allow_html=True)
 if search_clicked: # 조회하기 버튼 클릭 시 동작
     # 출발지, 분류 기준, 운송모드가 모두 선택되었는지 확인
     if not select_start or not select_listbox or not selected_mode:
-        bool_dict = {select_start: "출발지", select_listbox: "분류 기준", selected_mode: "운송모드"}
+        bool_dict = {"출발지": select_start, "분류 기준": select_listbox, "운송모드": selected_mode}
         # 선택되지 않은 항목들을 찾아서 경고 메시지 출력
-        not_selected = [v for k, v in bool_dict.items() if not k]
+        not_selected = [k for k, v in bool_dict.items() if not v]
         st.warning(f"다음 항목을 선택해주세요: {', '.join(not_selected)}")
     # 다 선택되었다면 get_data 함수를 호출(/출발지/를 파라미터로 사용)하여 데이터를 가져옴
     else:
