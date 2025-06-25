@@ -61,7 +61,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # 출발지 | 분류 기준 | 조회하기 버튼
-col1, col2, col3 = st.columns([1.5, 1.5, 1]) # 숫자는 각각의 너비 비율
+col1, col2, col3, col4 = st.columns([1.5, 1.5 ,1.5, 1]) # 숫자는 각각의 너비 비율
 
 # 출발지 column
 with col1:
@@ -73,8 +73,15 @@ with col1:
         index=None,
         key="start"
     )
-# 분류 기준 column
 with col2:
+    # 출발지 선택 박스
+    select_end = st.selectbox(
+        label="도착지",
+        options=["로테르담"],
+        index=0
+    )
+# 분류 기준 column
+with col3:
     # 분류 기준 선택 박스
     select_listbox = st.selectbox(
         label="분류 기준",
@@ -84,7 +91,7 @@ with col2:
         key="sort"
     )
 # 조회하기 버튼 column
-with col3:
+with col4:
     # 조회하기 버튼
     st.markdown("<div style='height: 8px'></div>", unsafe_allow_html=True)
     search_clicked = st.button("조회하기", use_container_width=True)
