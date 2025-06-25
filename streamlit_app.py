@@ -105,7 +105,12 @@ if search_clicked: # 조회하기 버튼 클릭 시 동작
         if selected_mode == "복합":
             data = [d for d in data if '+' in d['모드']]
         else:
-            data = [d for d in data if list(selected_mode) in list(d['모드'])]
+            processed_mode = {
+                "해운": "해상운송",
+                "항공": "항공운송",
+                "철도": "철도운송"
+            }
+            data = [d for d in data if processed_mode[selected_mode] in d['모드']]
 
         if select_listbox == "최소 비용순":
             st.write("최소 비용순으로 정렬된 경로를 보여줍니다.")
