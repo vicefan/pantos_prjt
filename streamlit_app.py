@@ -90,7 +90,7 @@ with col3:
     # 분류 기준 선택 박스
     select_listbox = st.selectbox(
         label="분류 기준",
-        options=["최소 비용순", "최단 거리순" ,"최소 환적순"],
+        options=["최소 비용순", "최단 시간순" ,"최소 환적순"],
         placeholder="분류 기준을 선택하세요.",
         index=None,
         key="sort"
@@ -127,7 +127,7 @@ if search_clicked: # 조회하기 버튼 클릭 시 동작
         # 정렬
         if select_listbox == "최소 비용순":
             result = sorted(data, key=lambda x: (x['비용(USD/TEU)'], x["탄소배출량"]))
-        elif select_listbox == "최단 거리순":
+        elif select_listbox == "최단 시간순":
             result = sorted(data, key=lambda x: (x['거리'], x['비용(USD/TEU)'], x["탄소배출량"])) # 거리 > 비용 > 탄소배출량 순으로 정렬
         elif select_listbox == "최소 환적순":
             result = sorted(data, key=lambda x: (x['환적 횟수'], x['비용(USD/TEU)'], x["탄소배출량"])) # 환적 횟수 > 비용 > 탄소배출량 순으로 정렬
@@ -162,7 +162,7 @@ if search_clicked: # 조회하기 버튼 클릭 시 동작
                     </div>
                     <div style="flex:1;">
                         <b>탄소 배출량</b><br>
-                        <span style="font-size:20px; color:#222;">{row['탄소배출량']}</span>
+                        <span style="font-size:20px; color:#222;">{row['탄소배출량']}kg/CO2</span>
                     </div>
                 </div>
             </div>
