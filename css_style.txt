@@ -18,7 +18,7 @@ h1 {
     border: 1px solid #E3ECF7 !important;
 }
 .stButton > button {
-    background-color: #1976D2 !important;
+    background-color: #B52E2A !important;
     color: #fff !important;
     border-radius: 8px !important;
     font-weight: 600 !important;

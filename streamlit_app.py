@@ -43,13 +43,13 @@ selected_mode = option_menu(
             "text-align": "center",
             "padding": "16px 18px",
             "margin": "5px",
-            "border": "1px solid #E3ECF7",
+            "border": "1px solid #B52E2A",
             "border-radius": "8px"
         },
         
     }
 )
-
+#A72B2A
 # 구분선
 st.markdown("<hr style='border: none; height: 2px; background-color: #E3ECF7; margin: 20px 0;'>", unsafe_allow_html=True)
 
