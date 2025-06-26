@@ -43,9 +43,13 @@ selected_mode = option_menu(
             "text-align": "center",
             "padding": "16px 18px",
             "margin": "5px",
-            "border": "1px solid #B52E2A",
+            "border": "1px solid #E3ECF7",
             "border-radius": "8px"
         },
+        "nav-link-selected": {
+            "background-color": "#B52E2A",  # 선택된 버튼의 배경색
+            "color": "#fff"  # 선택된 버튼의 글자색
+        }
         
     }
 )
@@ -138,7 +142,7 @@ if search_clicked: # 조회하기 버튼 클릭 시 동작
             <div style="border-radius: 16px; box-shadow: 0 2px 8px rgba(25, 118, 210, 0.06); border: 1.5px solid #f5eaea; margin-bottom: 24px; overflow: hidden;">
                 <!-- 경로 표시(핑크색 칸) -->
                 <div style="background: #fff6f4; padding: 22px 32px 18px 32px;">
-                    <span style="display:inline-flex; align-items:center; background:#fff; border-radius: 999px; padding:10px 22px; font-size:18px; font-weight:600; color:#1976D2; box-shadow:0 1px 4px #eee;">
+                    <span style="display:inline-flex; align-items:center; background:#fff; border-radius: 999px; padding:10px 22px; font-size:18px; font-weight:600; color:#B52E2A; box-shadow:0 1px 4px #eee;">
                         {row['전체 경로'].replace('-', '<span style="margin: 0 12px; color:#888;">&#8594;</span>')}
                     </span>
                 </div>
@@ -146,19 +150,19 @@ if search_clicked: # 조회하기 버튼 클릭 시 동작
                 <div style="background: #fff; padding: 22px 32px 18px 32px; display: flex; align-items: center; gap: 32px;">
                     <div style="flex:1;">
                         <b>예상 운임</b><br>
-                        <span style="font-size:20px; color:#222;">$ {row['비용(USD/TEU)']:,}</span>
+                        <span style="font-size:20px; color:#1976D2;">$ {row['비용(USD/TEU)']:,}</span>
                     </div>
                     <div style="flex:1;">
                         <b>소요일</b><br>
-                        <span style="font-size:20px; color:#1976D2;">{row['소요일']}</span>
+                        <span style="font-size:20px; color:#222;">{row['소요일']}</span>
                     </div>
                     <div style="flex:1;">
                         <b>환적 횟수</b><br>
-                        <span style="font-size:20px; color:#1976D2;">{row['환적 횟수']}</span>
+                        <span style="font-size:20px; color:#222;">{row['환적 횟수']}</span>
                     </div>
                     <div style="flex:1;">
                         <b>탄소 배출량</b><br>
-                        <span style="font-size:20px; color:#1976D2;">{row['탄소배출량']}</span>
+                        <span style="font-size:20px; color:#222;">{row['탄소배출량']}</span>
                     </div>
                 </div>
             </div>
