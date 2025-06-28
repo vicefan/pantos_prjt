@@ -126,9 +126,9 @@ if search_clicked: # 조회하기 버튼 클릭 시 동작
 
         # 정렬
         if select_listbox == "최소 비용순":
-            result = sorted(data, key=lambda x: (x['비용(USD/TEU)'], x["탄소배출량"]))
+            result = sorted(data, key=lambda x: (x['비용(USD/TEU)'], x["탄소배출량"])) # 비용 > 탄소배출량 순으로 정렬
         elif select_listbox == "최단 시간순":
-            result = sorted(data, key=lambda x: (x['소요일'], x['비용(USD/TEU)'], x["탄소배출량"])) # 거리 > 비용 > 탄소배출량 순으로 정렬
+            result = sorted(data, key=lambda x: (x['소요일'], x['비용(USD/TEU)'], x["탄소배출량"])) # 소요일 > 비용 > 탄소배출량 순으로 정렬
         elif select_listbox == "최소 환적순":
             result = sorted(data, key=lambda x: (x['환적 횟수'], x['비용(USD/TEU)'], x["탄소배출량"])) # 환적 횟수 > 비용 > 탄소배출량 순으로 정렬
         
